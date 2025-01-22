@@ -20,8 +20,9 @@ class CadastrarJogador : AppCompatActivity() {
             val nome = edtNomeJogador.text.toString()
             val posicao = edtPosicaoJogador.text.toString()
 
+            // Criar o objeto jogador
+            val jogador = Jogador(nome, posicao)
             // Aqui você pode adicionar a lógica para salvar o jogador
-            // Por exemplo, adicionar ao time, banco de dados, etc.
 
             // Limpar os campos após salvar
             edtNomeJogador.text.clear()

@@ -7,6 +7,7 @@ public class Jogador {
     private int jogos;
     private int vitorias;
     private int derrotas;
+    private int amistoso;
     private int campeonato;
 
     public Jogador(String nome, String posicao) {

@@ -52,12 +52,18 @@ class CadastrarTime : AppCompatActivity() {
             val nomeTime = edtNomeTime.text.toString()
             if (nomeTime.isNotBlank() && time.getJogadores().isNotEmpty()) {
                 time.setNomeTime(nomeTime)
+                DadosPartida.listaTimes.add(time)
                 Toast.makeText(this, "Time ${time.getNomeTime()} salvo com sucesso!", Toast.LENGTH_SHORT).show()
 
                 // Aqui, você pode adicionar lógica adicional para salvar no banco de dados ou finalizar a activity
             } else {
                 Toast.makeText(this, "Digite o nome do time e adicione ao menos um jogador", Toast.LENGTH_SHORT).show()
             }
+
+            // Limpar campos após salvar
+            edtNomeTime.text.clear()
+            edtNomeJogador.text.clear()
+            listaJogadoresLayout.removeAllViews()
         }
     }
 }

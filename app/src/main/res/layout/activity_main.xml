@@ -10,22 +10,14 @@
         android:id="@+id/btnCadastrarTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cadastrar Time"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Cadastrar Time" />
 
     <!-- Botão para Cadastro de Campo -->
     <Button
         android:id="@+id/btnCadastrarCampo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cadastrar Campo"
-        android:layout_marginTop="16dp" />
-
-    <!-- Botão para Cadastro de Jogador -->
-    <Button
-        android:id="@+id/btnCadastrarJogador"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cadastrar Jogador"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="Cadastrar Campo" />
 </LinearLayout>

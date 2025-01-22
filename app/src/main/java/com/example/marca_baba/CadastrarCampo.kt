@@ -3,6 +3,7 @@ package com.example.marca_baba
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class CadastrarCampo : AppCompatActivity() {
@@ -24,6 +25,9 @@ class CadastrarCampo : AppCompatActivity() {
             val cidade = edtCidade.text.toString()
             val cep = edtCep.text.toString().toIntOrNull() ?: 0 // Convertendo para inteiro
 
+            val campo = Campo(rua, bairro, cidade, cep)
+            DadosPartida.listaCampos.add(campo) // Adiciona o campo à lista global
+
             // Aqui você pode adicionar a lógica para salvar o campo
 
             // Limpar os campos após salvar
@@ -31,6 +35,7 @@ class CadastrarCampo : AppCompatActivity() {
             edtBairro.text.clear()
             edtCidade.text.clear()
             edtCep.text.clear()
+            Toast.makeText(this, "Campo salvo com sucesso!", Toast.LENGTH_SHORT).show()
         }
     }
 }
