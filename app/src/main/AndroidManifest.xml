@@ -28,7 +28,7 @@
 
         <activity android:name=".CadastrarTime" />
         <activity android:name=".CadastrarCampo" />
-        <activity android:name=".CadastrarJogador" />
+        <activity android:name=".PartidaAmistosaActivity" />
         
     </application>
 

@@ -20,4 +20,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Cadastrar Campo" />
+
+    <!-- Botão para Escolher Partida Amistosa -->
+    <Button
+        android:id="@+id/btnPartidaAmistosa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Partida Amistosa" />
+
+    <!-- Botão para Escolher Campeonato -->
+    <Button
+        android:id="@+id/btnCampeonato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Campeonato" />
 </LinearLayout>
