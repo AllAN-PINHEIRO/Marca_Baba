@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Botão para Campeonato
-//        btnCampeonato.setOnClickListener {
-//            val intent = Intent(this, CampeonatoActivity::class.java) // Substitua pela sua tela de campeonato
-//            startActivity(intent)
-//        }
+        btnCampeonato.setOnClickListener {
+            val intent = Intent(this, CampeonatoActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

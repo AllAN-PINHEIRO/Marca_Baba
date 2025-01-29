@@ -25,7 +25,7 @@ public class Time {
     }
 
     public void adicionaJogador(Jogador jogador) {
-        if (totalJogadores < 15) {
+        if (totalJogadores < 6) {
             this.jogadores.add(jogador);
             this.totalJogadores++;
         } else {

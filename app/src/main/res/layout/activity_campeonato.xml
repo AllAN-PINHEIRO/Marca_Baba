@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/spinnerTimes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/selecione_time" />
+
+    <Button
+        android:id="@+id/btnAdicionarTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Time" />
+
+    <Button
+        android:id="@+id/btnGerarConfrontos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gerar Confrontos" />
+
+    <TextView
+        android:id="@+id/txtConfrontos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confrontos:"
+        android:textSize="18sp"
+        android:paddingTop="16dp" />
+
+    <Button
+        android:id="@+id/btnSimularCampeonato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simular Campeonato" />
+
+    <TextView
+        android:id="@+id/txtCampeao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Campeão:"
+        android:textSize="18sp"
+        android:paddingTop="16dp" />
+</LinearLayout>

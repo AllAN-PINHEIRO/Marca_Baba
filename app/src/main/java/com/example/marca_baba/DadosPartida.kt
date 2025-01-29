@@ -6,4 +6,9 @@ object DadosPartida {
 
     // Listar os campos que estão cadastrados
     val listaCampos = mutableListOf<Campo>()
+
+    // Listar as partidas que estão cadastradas
+    val listaPartidas = mutableListOf<Partida>()
+
+
 }

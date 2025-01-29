@@ -41,6 +41,8 @@ class PartidaAmistosaActivity : AppCompatActivity() {
             Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
 
             // Aqui você pode adicionar a lógica para iniciar a partida
+            val partida = Partida(timeSelecionado, campoSelecionado)
+            DadosPartida.listaPartidas.add(partida)
         }
     }
 }

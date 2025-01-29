@@ -6,9 +6,9 @@ public class Campo {
     private String Rua;
     private String Bairro;
     private String Cidade;
-    private int Cep;
+    private String Cep;
 
-    public  Campo(String Rua, String bairro, String Cidade, int Cep){
+    public  Campo(String Rua, String bairro, String Cidade, String Cep){
         this.Rua = Rua;
         this.Bairro = Bairro;
         this.Cidade = Cidade;
@@ -39,11 +39,11 @@ public class Campo {
         Cidade = cidade;
     }
 
-    public int getCep() {
+    public String getCep() {
         return Cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         Cep = cep;
     }
 }

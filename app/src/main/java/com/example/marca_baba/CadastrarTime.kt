@@ -29,6 +29,11 @@ class CadastrarTime : AppCompatActivity() {
 
         // Botão para adicionar jogador ao time
         btnAdicionarJogador.setOnClickListener {
+            if (time.getJogadores().size >= 6) {
+                Toast.makeText(this, "Máximo de jogadores atingido (6)", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val nomeJogador = edtNomeJogador.text.toString()
 
             if (nomeJogador.isNotBlank()) {
