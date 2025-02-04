@@ -8,7 +8,7 @@ public class Campo {
     private String Cidade;
     private String Cep;
 
-    public  Campo(String Rua, String bairro, String Cidade, String Cep){
+    public  Campo(String Rua, String Bairro, String Cidade, String Cep){
         this.Rua = Rua;
         this.Bairro = Bairro;
         this.Cidade = Cidade;

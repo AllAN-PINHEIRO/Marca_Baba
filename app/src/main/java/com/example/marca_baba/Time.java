@@ -5,15 +5,11 @@ import java.util.List;
 
 public class Time {
     private String nomeTime;
-    private List<Jogador> jogadores; // Ajustado para List<Jogador>
-    private String posicao;
-    private int totalJogadores;
+    private List<Jogador> jogadores;
 
-    public Time(String nomeTime) {
+    public Time(String nomeTime, List<Jogador> jogadores) {
         this.nomeTime = nomeTime;
-        this.jogadores = new ArrayList<>();
-        this.posicao = posicao;
-        this.totalJogadores = 0;
+        this.jogadores = jogadores != null ? jogadores : new ArrayList<>();
     }
 
     public String getNomeTime() {
@@ -24,27 +20,18 @@ public class Time {
         this.nomeTime = nomeTime;
     }
 
-    public void adicionaJogador(Jogador jogador) {
-        if (totalJogadores < 6) {
-            this.jogadores.add(jogador);
-            this.totalJogadores++;
+    public void adicionarJogador(Jogador jogador) {
+        if (jogadores.size() < 7) {
+            jogadores.add(jogador);
         } else {
             System.out.println("Máximo de jogadores atingido");
         }
     }
 
     public void removeJogador(Jogador jogador) {
-        this.jogadores.remove(jogador);
-        this.totalJogadores--;
+        jogadores.remove(jogador);
     }
 
-    public String getPosicao() {
-        return posicao;
-    }
-
-    public void setPosicao(String posicao) {
-        this.posicao = posicao;
-    }
 
     public List<Jogador> getJogadores() {
         return jogadores;

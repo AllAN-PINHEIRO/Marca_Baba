@@ -1,4 +1,3 @@
-<!-- cadastrartime.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -20,6 +19,18 @@
         android:layout_height="wrap_content"
         android:hint="Nome do Jogador" />
 
+    <!-- Selecionar Posição do Jogador -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Posição:"
+        android:paddingTop="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerPosicao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <!-- Botão para adicionar jogador -->
     <Button
         android:id="@+id/btnAdicionarJogador"
@@ -31,7 +42,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jogadores:" />
+        android:text="Jogadores:"
+        android:paddingTop="8dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
