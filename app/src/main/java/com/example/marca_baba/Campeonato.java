@@ -50,6 +50,12 @@ public class Campeonato {
     }
 
     public void simularCampeonato() {
+
+        if (timesParticipantes.size() < 8) {
+            System.out.println("É necessário ter 8 times para simular o campeonato.");
+            return;
+        }
+
         if (confrontos.isEmpty()) {
             System.out.println("Gere os confrontos primeiro.");
             return;
