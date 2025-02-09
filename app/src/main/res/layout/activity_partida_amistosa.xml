@@ -15,15 +15,28 @@
         android:gravity="center"
         android:layout_marginBottom="24dp" />
 
-    <!-- Escolher Time -->
+    <!-- Escolher Time 1 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Escolha o seu Time:"
+        android:text="Escolha o Time 1:"
         android:textSize="18sp" />
 
     <Spinner
-        android:id="@+id/spinnerTimes"
+        android:id="@+id/spinnerTime1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Escolher Time 2 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolha o Time 2:"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/spinnerTime2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
