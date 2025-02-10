@@ -54,12 +54,59 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp" />
 
+    <!-- Selecionar Data -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecione a Data:"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnSelecionarData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolher Data"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/txtDataSelecionada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Data não selecionada"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Selecionar Hora -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecione a Hora:"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnSelecionarHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolher Hora"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/txtHoraSelecionada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora não selecionada"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+
     <!-- Botão para Iniciar Partida -->
     <Button
         android:id="@+id/btnIniciarPartida"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="Iniciar Amistoso"
-        android:textSize="18sp"
-        android:padding="12dp" />
+        android:textSize="18sp" />
 </LinearLayout>
