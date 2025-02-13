@@ -4,7 +4,7 @@ public class Partida {
     private String time1;
     private String time2;
     private String campo;
-    private String data;  
+    private String data;
     private String hora;
 
     public Partida(String time1, String time2, String campo, String data, String hora) {

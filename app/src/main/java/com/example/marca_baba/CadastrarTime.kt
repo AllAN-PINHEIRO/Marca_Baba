@@ -16,7 +16,7 @@ class CadastrarTime : AppCompatActivity() {
 
     private lateinit var spinnerPosicao: Spinner
     private lateinit var listaJogadores: MutableList<Jogador>
-    private  lateinit var edtNomeTime: EditText
+    private lateinit var edtNomeTime: EditText
     private lateinit var edtNomeJogador: EditText
     private lateinit var btnAdicionarJogador: Button
     private lateinit var btnSalvarTime: Button

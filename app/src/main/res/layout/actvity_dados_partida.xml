@@ -5,190 +5,45 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Título da Tela -->
-
     <TextView
-        android:id="@+id/tituloDadosJogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DADOS DO JOGO"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp"/>
+        android:text="Cadastrar Campo"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp" />
 
-    <!-- Tabela para Lista de Jogadores do Time 1 -->
-
-    <TableLayout
-        android:id="@+id/tabelaTime1"
+    <EditText
+        android:id="@+id/edtRua"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:shrinkColumns="*"
-        android:stretchColumns="*">
+        android:hint="Rua"
+        android:layout_marginBottom="16dp" />
 
-        <!-- Cabeçalho da Tabela -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#DDD">
+    <EditText
+        android:id="@+id/edtBairro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bairro"
+        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:padding="8dp"
-                android:text="Jogador"
-                android:textStyle="bold" />
+    <EditText
+        android:id="@+id/edtCidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cidade"
+        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Assistência"
-                android:textStyle="bold" />
+    <EditText
+        android:id="@+id/edtCep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="CEP"
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Gol"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Amarelo"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Vermelho"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <!-- Linha de Jogador 1 -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#EEE">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:padding="8dp"
-                android:text="Jogador 1" />
-
-            <EditText
-                android:id="@+id/etAssistencia1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etGol1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etAmarelo1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etVermelho1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-        </TableRow>
-
-        <!-- Linha de Jogador 2 -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#EEE">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:padding="8dp"
-                android:text="Jogador 2" />
-
-            <EditText
-                android:id="@+id/etAssistencia2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etGol2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etAmarelo2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-
-            <EditText
-                android:id="@+id/etVermelho2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:padding="8dp"
-                android:text="0" />
-        </TableRow>
-
-    </TableLayout>
-
-    <!-- Botão para Salvar Dados -->
     <Button
-        android:id="@+id/btnSalvar"
+        android:id="@+id/btnSalvarCampo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:text="Salvar Dados"
-        android:textColor="@android:color/white" />
-
-
+        android:text="Salvar Campo" />
 </LinearLayout>
