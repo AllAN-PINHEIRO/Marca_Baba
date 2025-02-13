@@ -26,7 +26,7 @@ class CadastrarCampo : AppCompatActivity() {
             val cep = edtCep.text.toString()
 
             val campo = Campo(rua, bairro, cidade, cep)
-            DadosPartida.listaCampos.add(campo) // Adiciona o campo à lista global
+            DadosPartida.listaCampos.add(campo) // Adiciona o campo à lista globalval campo = Campo(rua, bairro, cidade, cep)
 
             // Aqui você pode adicionar a lógica para salvar o campo
 

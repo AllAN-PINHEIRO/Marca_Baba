@@ -10,5 +10,4 @@ object DadosPartida {
     // Listar as partidas que estão cadastradas
     val listaPartidas = mutableListOf<Partida>()
 
-
 }
