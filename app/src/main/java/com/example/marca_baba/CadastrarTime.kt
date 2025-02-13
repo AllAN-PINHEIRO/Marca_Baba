@@ -91,7 +91,6 @@ class CadastrarTime : AppCompatActivity() {
         }
 
         val time = Time(nomeTime, listaJogadores)
-        DadosPartida.listaTimes.add(time)
 
         Toast.makeText(this, "Time salvo com sucesso!", Toast.LENGTH_SHORT).show()
 

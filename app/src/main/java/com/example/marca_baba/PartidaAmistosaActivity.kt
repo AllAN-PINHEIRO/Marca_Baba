@@ -2,97 +2,127 @@ package com.example.marca_baba
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
+import java.util.Calendar
 
 class PartidaAmistosaActivity : AppCompatActivity() {
+    private lateinit var spinnerTime1: Spinner
+    private lateinit var spinnerTime2: Spinner
+    private lateinit var spinnerCampos: Spinner
+    private lateinit var btnSelecionarData: Button
+    private lateinit var btnSelecionarHora: Button
+    private lateinit var btnIniciarPartida: Button
+    private var txtDataSelecionada: TextView? = null
+    private var txtHoraSelecionada: TextView? = null
+    private var dataSelecionada = ""
+    private var horaSelecionada = ""
 
-    private var dataSelecionada: String? = null
-    private var horaSelecionada: String? = null
+    private var listaTimes: List<String>? = null // Lista de times disponíveis
+    private var listaCampos: List<String>? = null // Lista de campos disponíveis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partida_amistosa)
 
-        val spinnerTime1: Spinner = findViewById(R.id.spinnerTime1)
-        val spinnerTime2: Spinner = findViewById(R.id.spinnerTime2)
-        val spinnerCampos: Spinner = findViewById(R.id.spinnerCampos)
-        val btnIniciarPartida: Button = findViewById(R.id.btnIniciarPartida)
-        val txtDataSelecionada: TextView = findViewById(R.id.txtDataSelecionada)
-        val txtHoraSelecionada: TextView = findViewById(R.id.txtHoraSelecionada)
-        val btnDataSelecionada: Button = findViewById(R.id.btnSelecionarData)
-        val btnEscolherHora: Button = findViewById(R.id.btnSelecionarHora)
+        // Inicializando componentes
+        spinnerTime1 = findViewById(R.id.spinnerTime1)
+        spinnerTime2 = findViewById(R.id.spinnerTime2)
+        spinnerCampos = findViewById(R.id.spinnerCampos)
+        btnSelecionarData = findViewById(R.id.btnSelecionarData)
+        btnSelecionarHora = findViewById(R.id.btnSelecionarHora)
+        btnIniciarPartida = findViewById(R.id.btnIniciarPartida)
+        txtDataSelecionada = findViewById(R.id.txtDataSelecionada)
+        txtHoraSelecionada = findViewById(R.id.txtHoraSelecionada)
 
-        val listaTimes = DadosPartida.listaTimes.map { it.getNomeTime() }
-        val listaCampos = DadosPartida.listaCampos.map { "${it.getRua()}, ${it.getBairro()}, ${it.getCidade()}" }
+        // Simulando dados de times e campos (aqui podia entrar um banco de dados)
+        listaTimes = listOf("Time A", "Time B", "Time C")
+        listaCampos = listOf("Campo 1", "Campo 2", "Campo 3")
 
-        val adapterTimes = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTimes)
-        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTime1.adapter = adapterTimes
-        spinnerTime2.adapter = adapterTimes
+        // Configurando os Spinners
+        configurarSpinner(spinnerTime1, listaTimes!!)
+        configurarSpinner(spinnerTime2, listaTimes!!)
+        configurarSpinner(spinnerCampos, listaCampos!!)
 
-        val adapterCampos = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaCampos)
-        adapterCampos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCampos.adapter = adapterCampos
-
-        // Botão para escolher a data
-        btnDataSelecionada.setOnClickListener {
-            val calendario = Calendar.getInstance()
-            val ano = calendario.get(Calendar.YEAR)
-            val mes = calendario.get(Calendar.MONTH)
-            val dia = calendario.get(Calendar.DAY_OF_MONTH)
-
-            val datePicker = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-                dataSelecionada = "$dayOfMonth/${month + 1}/$year"
-                txtDataSelecionada.text = "Data: $dataSelecionada"
-            }, ano, mes, dia)
-            datePicker.show()
-        }
-
-        // Botão para escolher a hora
-        btnEscolherHora.setOnClickListener {
-            val calendario = Calendar.getInstance()
-            val hora = calendario.get(Calendar.HOUR_OF_DAY)
-            val minuto = calendario.get(Calendar.MINUTE)
-
-            val timePicker = TimePickerDialog(this, { _, hourOfDay, minute ->
-                horaSelecionada = String.format("%02d:%02d", hourOfDay, minute)
-                txtHoraSelecionada.text = "Hora: $horaSelecionada"
-            }, hora, minuto, true)
-            timePicker.show()
-        }
+        // botões de data e hora
+        btnSelecionarData.setOnClickListener(View.OnClickListener { v: View? -> abrirDatePicker() })
+        btnSelecionarHora.setOnClickListener(View.OnClickListener { v: View? -> abrirTimePicker() })
 
         // Botão para iniciar a partida
-        btnIniciarPartida.setOnClickListener {
-            val time1Selecionado = spinnerTime1.selectedItem.toString()
-            val time2Selecionado = spinnerTime2.selectedItem.toString()
-            val campoSelecionado = spinnerCampos.selectedItem.toString()
+        btnIniciarPartida.setOnClickListener(View.OnClickListener { v: View? -> iniciarPartida() })
+    }
 
-            if (time1Selecionado == time2Selecionado) {
-                Toast.makeText(this, "Escolha times diferentes!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun configurarSpinner(spinner: Spinner, dados: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dados)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+    }
 
-            if (dataSelecionada == null || horaSelecionada == null) {
-                Toast.makeText(this, "Escolha data e hora da partida!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun abrirDatePicker() {
+        val calendario = Calendar.getInstance()
+        val ano = calendario[Calendar.YEAR]
+        val mes = calendario[Calendar.MONTH]
+        val dia = calendario[Calendar.DAY_OF_MONTH]
 
-            val mensagem = """
-                Partida amistosa iniciada!
-                Time 1: $time1Selecionado
-                Time 2: $time2Selecionado
-                Campo: $campoSelecionado
-                Data: $dataSelecionada
-                Hora: $horaSelecionada
-            """.trimIndent()
+        val datePicker =
+            DatePickerDialog(this, { view: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                dataSelecionada = dayOfMonth.toString() + "/" + (month + 1) + "/" + year
+                txtDataSelecionada!!.text = dataSelecionada
+            }, ano, mes, dia)
+        datePicker.show()
+    }
 
-            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
+    private fun abrirTimePicker() {
+        val calendario = Calendar.getInstance()
+        val hora = calendario[Calendar.HOUR_OF_DAY]
+        val minuto = calendario[Calendar.MINUTE]
 
-            val partida = Partida(time1Selecionado, time2Selecionado, campoSelecionado, dataSelecionada!!, horaSelecionada!!)
-            DadosPartida.listaPartidas.add(partida)
+        val timePicker = TimePickerDialog(this, { view: TimePicker?, hourOfDay: Int, minute: Int ->
+            horaSelecionada = String.format("%02d:%02d", hourOfDay, minute)
+            txtHoraSelecionada!!.text = horaSelecionada
+        }, hora, minuto, true)
+        timePicker.show()
+    }
+
+    private fun iniciarPartida() {
+        val time1 = spinnerTime1!!.selectedItem.toString()
+        val time2 = spinnerTime2!!.selectedItem.toString()
+        val campo = spinnerCampos!!.selectedItem.toString()
+
+        if (time1 == time2) {
+            Toast.makeText(this, "Os times devem ser diferentes!", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        if (dataSelecionada.isEmpty() || horaSelecionada.isEmpty()) {
+            Toast.makeText(this, "Selecione data e hora!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val intent = Intent(this, DadosPartidaActivity::class.java)
+        Log.d("PartidaAmistosaActivity", "Iniciando partida com: $time1, $time2, $campo, $dataSelecionada, $horaSelecionada")
+        intent.putExtra("time1", time1)
+        intent.putExtra("time2", time2)
+        intent.putExtra("campo", campo)
+        intent.putExtra("data", dataSelecionada)
+        intent.putExtra("hora", horaSelecionada)
+        startActivity(intent)
+
+        intent.putExtra("time1", time1)
+        intent.putExtra("time2", time2)
+        intent.putExtra("campo", campo)
+        intent.putExtra("data", dataSelecionada)
+        intent.putExtra("hora", horaSelecionada)
+        startActivity(intent)
     }
 }

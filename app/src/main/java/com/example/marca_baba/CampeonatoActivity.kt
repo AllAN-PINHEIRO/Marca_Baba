@@ -27,22 +27,7 @@ class CampeonatoActivity : AppCompatActivity() {
         // Inicializa o campeonato
         campeonato = Campeonato()
 
-        // Preenche o spinner com os times cadastrados
-        val listaTimes = DadosPartida.listaTimes.map { it.getNomeTime() }
-        val adapterTimes = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTimes)
-        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTimes.adapter = adapterTimes
 
-        // Botão para adicionar time ao campeonato
-        btnAdicionarTime.setOnClickListener {
-            val timeSelecionado = spinnerTimes.selectedItem.toString()
-            val time = DadosPartida.listaTimes.find { it.getNomeTime() == timeSelecionado }
-
-            if (time != null) {
-                campeonato.adicionarTime(time)
-                Toast.makeText(this, "Time $timeSelecionado adicionado ao campeonato!", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         // Botão para gerar confrontos
         btnGerarConfrontos.setOnClickListener {
