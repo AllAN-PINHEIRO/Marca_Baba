@@ -1,62 +1,72 @@
 package com.example.marca_baba
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class CampeonatoActivity : AppCompatActivity() {
 
-    private lateinit var campeonato: Campeonato
+    private lateinit var campeonatoNomeEditText: EditText
+    private lateinit var timesSpinner: Spinner
+    private lateinit var adicionarTimeButton: Button
+    private lateinit var salvarCampeonatoButton: Button
+    private lateinit var timesListView: ListView
+
+    private val timesCadastrados = ArrayList(DadosPartida.listaTimes)
+    private val campeonatosSalvos = mutableListOf<Campeonato>()
+    private val timesDoCampeonato = mutableListOf<Time>()
+    private lateinit var timesAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campeonato)
 
-        // Referências para os componentes da tela
-        val spinnerTimes: Spinner = findViewById(R.id.spinnerTimes)
-        val btnAdicionarTime: Button = findViewById(R.id.btnAdicionarTime)
-        val btnGerarConfrontos: Button = findViewById(R.id.btnGerarConfrontos)
-        val txtConfrontos: TextView = findViewById(R.id.txtConfrontos)
-        val btnSimularCampeonato: Button = findViewById(R.id.btnSimularCampeonato)
-        val txtCampeao: TextView = findViewById(R.id.txtCampeao)
+        campeonatoNomeEditText = findViewById(R.id.campeonatoNomeEditText)
+        timesSpinner = findViewById(R.id.timesSpinner)
+        adicionarTimeButton = findViewById(R.id.adicionarTimeButton)
+        salvarCampeonatoButton = findViewById(R.id.salvarCampeonatoButton)
+        timesListView = findViewById(R.id.timesListView)
 
-        // Inicializa o campeonato
-        campeonato = Campeonato()
+        val timesNomes = timesCadastrados.map { it.nomeTime }
 
-        // Preenche o spinner com os times cadastrados
-        val listaTimes = DadosPartida.listaTimes.map { it.getNomeTime() }
-        val adapterTimes = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTimes)
-        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTimes.adapter = adapterTimes
+        // Configurando o Spinner
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timesNomes)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        timesSpinner.adapter = spinnerAdapter
 
-        // Botão para adicionar time ao campeonato
-        btnAdicionarTime.setOnClickListener {
-            val timeSelecionado = spinnerTimes.selectedItem.toString()
-            val time = DadosPartida.listaTimes.find { it.getNomeTime() == timeSelecionado }
+        // Configurando o ListView
+        timesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, timesDoCampeonato.map { it.nomeTime })
+        timesListView.adapter = timesAdapter
 
-            if (time != null) {
-                campeonato.adicionarTime(time)
-                Toast.makeText(this, "Time $timeSelecionado adicionado ao campeonato!", Toast.LENGTH_SHORT).show()
-            }
+        adicionarTimeButton.setOnClickListener { adicionarTime() }
+        salvarCampeonatoButton.setOnClickListener { salvarCampeonato() }
+    }
+
+    private fun adicionarTime() {
+        val timeSelecionadoNome = timesSpinner.selectedItem as String
+        val time = timesCadastrados.find { it.nomeTime == timeSelecionadoNome }
+
+        if (time != null && timesDoCampeonato.size < 8 && !timesDoCampeonato.contains(time)) {
+            timesDoCampeonato.add(time)
+            atualizarLista()
         }
+    }
 
-        // Botão para gerar confrontos
-        btnGerarConfrontos.setOnClickListener {
-            campeonato.gerarConfrontos()
-            val confrontos = campeonato.getConfrontos().joinToString("\n")
-            txtConfrontos.text = "Confrontos:\n$confrontos"
+    private fun salvarCampeonato() {
+        val nomeCampeonato = campeonatoNomeEditText.text.toString()
+        if (nomeCampeonato.isNotEmpty() && timesDoCampeonato.size >= 2) {
+            val campeonato = Campeonato(nomeCampeonato, ArrayList(timesDoCampeonato))
+            campeonatosSalvos.add(campeonato)
+            campeonatoNomeEditText.setText("")
+            timesDoCampeonato.clear()
+            atualizarLista()
         }
+    }
 
-        // Botão para simular o campeonato
-        btnSimularCampeonato.setOnClickListener {
-            campeonato.simularCampeonato()
-            val campeao = campeonato.getCampeao()
-            txtCampeao.text = "Campeão: $campeao"
-            Toast.makeText(this, "Campeonato simulado! Campeão: $campeao", Toast.LENGTH_LONG).show()
-        }
+    private fun atualizarLista() {
+        timesAdapter.clear()
+        timesAdapter.addAll(timesDoCampeonato.map { it.nomeTime })
+        timesAdapter.notifyDataSetChanged()
     }
 }

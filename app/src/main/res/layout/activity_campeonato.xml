@@ -5,43 +5,34 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/spinnerTimes"
+    <EditText
+        android:id="@+id/campeonatoNomeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:prompt="@string/selecione_time" />
+        android:hint="Nome do Campeonato" />
+
+    <Spinner
+        android:id="@+id/timesSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btnAdicionarTime"
+        android:id="@+id/adicionarTimeButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Adicionar Time" />
 
-    <Button
-        android:id="@+id/btnGerarConfrontos"
+    <ListView
+        android:id="@+id/timesListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gerar Confrontos" />
-
-    <TextView
-        android:id="@+id/txtConfrontos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Confrontos:"
-        android:textSize="18sp"
-        android:paddingTop="16dp" />
+        android:layout_height="200dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
 
     <Button
-        android:id="@+id/btnSimularCampeonato"
+        android:id="@+id/salvarCampeonatoButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Simular Campeonato" />
+        android:text="Salvar Campeonato" />
 
-    <TextView
-        android:id="@+id/txtCampeao"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Campeão:"
-        android:textSize="18sp"
-        android:paddingTop="16dp" />
 </LinearLayout>
