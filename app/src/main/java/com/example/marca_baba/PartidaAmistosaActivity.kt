@@ -80,6 +80,13 @@ class PartidaAmistosaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Verifica se há pelo menos dois times cadastrados
+            if (DadosPartida.listaTimes.size < 2) {
+                Toast.makeText(this, "Cadastre pelo menos dois times antes de agendar uma partida!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
             val mensagem = """
                 Partida amistosa iniciada!
                 Time 1: $time1Selecionado
@@ -93,6 +100,8 @@ class PartidaAmistosaActivity : AppCompatActivity() {
 
             val partida = Partida(time1Selecionado, time2Selecionado, campoSelecionado, dataSelecionada!!, horaSelecionada!!)
             DadosPartida.listaPartidas.add(partida)
+
+            Toast.makeText(this, "Partida agendada com sucesso!", Toast.LENGTH_LONG).show()
         }
     }
 }

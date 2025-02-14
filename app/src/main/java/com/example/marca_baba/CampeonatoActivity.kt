@@ -55,6 +55,14 @@ class CampeonatoActivity : AppCompatActivity() {
 
     private fun salvarCampeonato() {
         val nomeCampeonato = campeonatoNomeEditText.text.toString()
+
+        // Verifica se o nome do campeonato está vazio
+        if (nomeCampeonato.isEmpty()) {
+            Toast.makeText(this, "Digite o nome do campeonato!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Verifica se há pelo menos 2 times no campeonato
         if (nomeCampeonato.isNotEmpty() && timesDoCampeonato.size >= 2) {
             val campeonato = Campeonato(nomeCampeonato, ArrayList(timesDoCampeonato))
             campeonatosSalvos.add(campeonato)
@@ -62,6 +70,22 @@ class CampeonatoActivity : AppCompatActivity() {
             timesDoCampeonato.clear()
             atualizarLista()
         }
+
+        // Verifica se já existe um campeonato com o mesmo nome
+        if (DadosPartida.listaCampeonatos.any { it.nome == nomeCampeonato }) {
+            Toast.makeText(this, "Já existe um campeonato com esse nome!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Salva o campeonato
+        val campeonato = Campeonato(nomeCampeonato, ArrayList(timesDoCampeonato))
+        DadosPartida.listaCampeonatos.add(campeonato)
+
+        // Limpa os campos após salvar
+        campeonatoNomeEditText.text.clear()
+        timesDoCampeonato.clear()
+        atualizarLista()
+        Toast.makeText(this, "Campeonato salvo com sucesso!", Toast.LENGTH_SHORT).show()
     }
 
     private fun atualizarLista() {
