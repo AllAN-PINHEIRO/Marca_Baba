@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -67,4 +68,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Room
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")// Para usar anotações do Room com Kotlin
+    implementation ("androidx.room:room-ktx:2.6.1") // Suporte a corrotinas
+
+    // Gson (para TypeConverter)
+    implementation ("com.google.code.gson:gson:2.10.1")
 }
