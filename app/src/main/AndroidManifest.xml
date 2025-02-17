@@ -26,10 +26,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CadastrarTime" />
-        <activity android:name=".CadastrarCampo" />
-        <activity android:name=".PartidaAmistosaActivity" />
-        <activity android:name=".CampeonatoActivity" />
+        <activity android:name=".controller.CadastrarTime" />
+        <activity android:name=".controller.CadastrarCampo" />
+        <activity android:name=".controller.PartidaAmistosaActivity" />
+        <activity android:name=".controller.CampeonatoActivity" />
         <activity android:name=".DadosPartidaActivity"/>
 
 

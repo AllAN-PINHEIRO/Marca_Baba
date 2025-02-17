@@ -5,45 +5,52 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cadastrar Campo"
-        android:textSize="24sp"
-        android:layout_marginBottom="16dp" />
-
     <EditText
         android:id="@+id/edtRua"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Rua"
-        android:layout_marginBottom="16dp" />
+        android:hint="Rua"/>
 
     <EditText
         android:id="@+id/edtBairro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Bairro"
-        android:layout_marginBottom="16dp" />
+        android:hint="Bairro"/>
 
     <EditText
         android:id="@+id/edtCidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cidade"
-        android:layout_marginBottom="16dp" />
+        android:hint="Cidade"/>
 
     <EditText
         android:id="@+id/edtCep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="CEP"
-        android:inputType="number"
-        android:layout_marginBottom="16dp" />
+        android:inputType="number"/>
 
+    <!-- ImageView para exibir a imagem selecionada -->
+    <ImageView
+        android:id="@+id/imgViewCampo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_image_placeholder"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Botão para abrir a galeria -->
+    <Button
+        android:id="@+id/btnAdicionarImagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Imagem"/>
+
+    <!-- Botão para salvar o campo -->
     <Button
         android:id="@+id/btnSalvarCampo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Salvar Campo" />
+        android:text="Salvar Campo"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>

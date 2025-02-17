@@ -1,4 +1,9 @@
-package com.example.marca_baba
+package com.example.marca_baba.data
+
+import com.example.marca_baba.model.Campeonato
+import com.example.marca_baba.model.Campo
+import com.example.marca_baba.model.Partida
+import com.example.marca_baba.model.Time
 
 object DadosPartida {
     // Listar os times que estão cadastrados

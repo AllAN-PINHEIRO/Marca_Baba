@@ -1,9 +1,12 @@
-package com.example.marca_baba
+package com.example.marca_baba.controller
 
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.marca_baba.model.Campeonato
+import com.example.marca_baba.data.DadosPartida
+import com.example.marca_baba.R
+import com.example.marca_baba.model.Time
 
 class CampeonatoActivity : AppCompatActivity() {
 
@@ -64,7 +67,10 @@ class CampeonatoActivity : AppCompatActivity() {
 
         // Verifica se há pelo menos 2 times no campeonato
         if (nomeCampeonato.isNotEmpty() && timesDoCampeonato.size >= 2) {
-            val campeonato = Campeonato(nomeCampeonato, ArrayList(timesDoCampeonato))
+            val campeonato = Campeonato(
+                nomeCampeonato,
+                ArrayList(timesDoCampeonato)
+            )
             campeonatosSalvos.add(campeonato)
             campeonatoNomeEditText.setText("")
             timesDoCampeonato.clear()
@@ -78,7 +84,10 @@ class CampeonatoActivity : AppCompatActivity() {
         }
 
         // Salva o campeonato
-        val campeonato = Campeonato(nomeCampeonato, ArrayList(timesDoCampeonato))
+        val campeonato = Campeonato(
+            nomeCampeonato,
+            ArrayList(timesDoCampeonato)
+        )
         DadosPartida.listaCampeonatos.add(campeonato)
 
         // Limpa os campos após salvar

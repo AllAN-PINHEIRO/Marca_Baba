@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.marca_baba.controller.CadastrarCampo
+import com.example.marca_baba.controller.CadastrarTime
+import com.example.marca_baba.controller.CampeonatoActivity
+import com.example.marca_baba.controller.PartidaAmistosaActivity
 
 class MainActivity : AppCompatActivity() {
 

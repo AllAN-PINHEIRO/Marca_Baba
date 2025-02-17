@@ -1,4 +1,4 @@
-package com.example.marca_baba;
+package com.example.marca_baba.model;
 
 import java.util.ArrayList;
 import java.util.List;

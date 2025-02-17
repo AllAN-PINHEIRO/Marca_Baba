@@ -1,4 +1,4 @@
-package com.example.marca_baba
+package com.example.marca_baba.controller
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -9,20 +9,37 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.marca_baba.data.DadosPartida
+import com.example.marca_baba.R
+import com.example.marca_baba.dao.JogadorDAO
+import com.example.marca_baba.dao.TimeDAO
+import com.example.marca_baba.data.AppDatabase
+import kotlinx.coroutines.launch
+import com.example.marca_baba.data.Time
+import com.example.marca_baba.data.Jogador
 
 class CadastrarTime : AppCompatActivity() {
 
     private lateinit var spinnerPosicao: Spinner
-    private lateinit var listaJogadores: MutableList<Jogador>
     private lateinit var edtNomeTime: EditText
     private lateinit var edtNomeJogador: EditText
     private lateinit var btnAdicionarJogador: Button
     private lateinit var btnSalvarTime: Button
     private lateinit var listaJogadoresLayout: LinearLayout
+    private lateinit var db: AppDatabase
+    private lateinit var timeDAO: TimeDAO
+    private lateinit var jogadorDAO: JogadorDAO
+    private lateinit var listaJogadores: MutableList<Jogador>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.cadastrartime)
+
+        // Inicializa o banco de dados e os Daos
+        db = AppDatabase.getDatabase(this)
+        timeDAO = db.timeDAO()
+        jogadorDAO = db.jogadorDAO()
 
         // Inicializa as referências dos componentes da tela
         edtNomeTime = findViewById(R.id.edtNomeTime)
@@ -36,7 +53,15 @@ class CadastrarTime : AppCompatActivity() {
         listaJogadores = mutableListOf()
 
         // Configura o Spinner de posições
-        val posicoesDisponiveis = arrayOf("Goleiro", "Zagueiro Esquerdo", "Zagueiro Direito", "Ala Esquerdo", "Ala Direito", "Meio-Campo", "Atacante")
+        val posicoesDisponiveis = arrayOf(
+            "Goleiro",
+            "Zagueiro Esquerdo",
+            "Zagueiro Direito",
+            "Ala Esquerdo",
+            "Ala Direito",
+            "Meio-Campo",
+            "Atacante"
+        )
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, posicoesDisponiveis)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPosicao.adapter = adapter
@@ -71,7 +96,8 @@ class CadastrarTime : AppCompatActivity() {
 
         // Verifica se a posição já está em uso
         if (listaJogadores.any { it.posicao == posicaoJogador }) {
-            Toast.makeText(this, "Já existe um jogador com essa posição!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Já existe um jogador com essa posição!", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -82,7 +108,15 @@ class CadastrarTime : AppCompatActivity() {
         }
 
         // Adiciona o jogador à lista
-        val jogador = Jogador(nomeJogador, posicaoJogador)
+//        val jogador = Jogador(nomeJogador, posicaoJogador)
+//        listaJogadores.add(jogador)
+
+        // Adiciona o jogador à lista
+        val jogador = com.example.marca_baba.data.Jogador(
+            nome = nomeJogador,
+            posicao = posicaoJogador,
+            timeId = 0
+        ) // timeId será definido ao salvar
         listaJogadores.add(jogador)
 
         // Exibe o jogador na lista de jogadores
@@ -99,7 +133,15 @@ class CadastrarTime : AppCompatActivity() {
 
     private fun atualizarSpinnerPosicoes() {
         // Filtra as posições disponíveis (removendo as já utilizadas)
-        val posicoesDisponiveis = arrayOf("Goleiro", "Zagueiro Esquerdo", "Zagueiro Direito", "Ala Esquerdo", "Ala Direito", "Meio-Campo", "Atacante")
+        val posicoesDisponiveis = arrayOf(
+            "Goleiro",
+            "Zagueiro Esquerdo",
+            "Zagueiro Direito",
+            "Ala Esquerdo",
+            "Ala Direito",
+            "Meio-Campo",
+            "Atacante"
+        )
             .filter { posicao -> !listaJogadores.any { it.posicao == posicao } }
 
         // Atualiza o Spinner com as posições disponíveis
@@ -119,29 +161,39 @@ class CadastrarTime : AppCompatActivity() {
 
         // Verifica se o time tem exatamente 7 jogadores
         if (listaJogadores.size != 7) {
-            Toast.makeText(this, "O time precisa ter exatamente 7 jogadores!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "O time precisa ter exatamente 7 jogadores!", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         // Verifica se já existe um time com o mesmo nome
-        if (DadosPartida.listaTimes.any { it.nomeTime == nomeTime }) {
-            Toast.makeText(this, "Já existe um time com esse nome!", Toast.LENGTH_SHORT).show()
-            return
+        lifecycleScope.launch {
+            val timeExistente = timeDAO.listarTimePorNome(nomeTime)
+            if (timeExistente != null) {
+                Toast.makeText(this@CadastrarTime, "Já existe um time com esse nome!", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
+            // Salva o time no banco de dados (dentro do escopo da corrotina)
+            val time = Time(nomeTime = nomeTime)
+            val timeId = timeDAO.inserirTime(time)
+
+            // Salva os jogadores no banco de dados
+            listaJogadores.forEach { jogador ->
+                val jogadorComTimeId = jogador.copy(timeId = timeId) // Associa o jogador ao time
+                jogadorDAO.inserirJogador(jogadorComTimeId)
+            }
+
+            Toast.makeText(this@CadastrarTime, "Time salvo com sucesso!", Toast.LENGTH_SHORT).show()
+
+            // Limpa os campos após salvar
+            edtNomeTime.text.clear()
+            edtNomeJogador.text.clear()
+            listaJogadores.clear()
+            listaJogadoresLayout.removeAllViews()
+
+            // Atualiza o Spinner de posições
+            atualizarSpinnerPosicoes()
         }
-
-        // Salva o time
-        val time = Time(nomeTime, listaJogadores)
-        DadosPartida.listaTimes.add(time)
-
-        Toast.makeText(this, "Time salvo com sucesso!", Toast.LENGTH_SHORT).show()
-
-        // Limpa os campos após salvar
-        edtNomeTime.text.clear()
-        edtNomeJogador.text.clear()
-        listaJogadores.clear()
-        listaJogadoresLayout.removeAllViews()
-
-        // Atualiza o Spinner de posições
-        atualizarSpinnerPosicoes()
     }
 }

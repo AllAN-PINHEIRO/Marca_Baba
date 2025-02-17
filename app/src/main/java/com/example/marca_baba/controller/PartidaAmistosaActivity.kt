@@ -1,16 +1,30 @@
-package com.example.marca_baba
+package com.example.marca_baba.controller
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.marca_baba.model.Partida
+import com.example.marca_baba.R
+import com.example.marca_baba.dao.CampoDAO
+import com.example.marca_baba.data.AppDatabase
+import com.example.marca_baba.data.DadosPartida
+import com.example.marca_baba.view.TimeViewModel
+import com.example.marca_baba.view.TimeViewModelFactory
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PartidaAmistosaActivity : AppCompatActivity() {
 
     private var dataSelecionada: String? = null
     private var horaSelecionada: String? = null
+
+    private lateinit var timeViewModel: TimeViewModel
+
+    private lateinit var campoDAO: CampoDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +39,40 @@ class PartidaAmistosaActivity : AppCompatActivity() {
         val btnDataSelecionada: Button = findViewById(R.id.btnSelecionarData)
         val btnEscolherHora: Button = findViewById(R.id.btnSelecionarHora)
 
-        val listaTimes = DadosPartida.listaTimes.map { it.getNomeTime() }
-        val listaCampos = DadosPartida.listaCampos.map { "${it.getRua()}, ${it.getBairro()}, ${it.getCidade()}" }
+        // Inicializa o ViewModel para acessar os dados do banco de dados
+        timeViewModel = ViewModelProvider(
+            this,
+            TimeViewModelFactory(AppDatabase.getDatabase(this).timeDAO())  // Passa o timeDAO
+        ).get(TimeViewModel::class.java)
 
-        val adapterTimes = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTimes)
-        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerTime1.adapter = adapterTimes
-        spinnerTime2.adapter = adapterTimes
+        // Inicializa o DAO para acessar os dados do banco de dados
+        campoDAO = AppDatabase.getDatabase(this).campoDAO()
 
-        val adapterCampos = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaCampos)
-        adapterCampos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCampos.adapter = adapterCampos
+//        val listaTimes = DadosPartida.listaTimes.map { it.getNomeTime() }
+//        val listaCampos = DadosPartida.listaCampos.map { "${it.getRua()}, ${it.getBairro()}, ${it.getCidade()}" }
+
+        // Buscar times do banco de dados e atualize a lista no Spinner
+        timeViewModel.listaTimes.observe(this) { times ->
+            val listaTimes = times.map { it.nomeTime }
+
+            val adapterTimes = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaTimes)
+            adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerTime1.adapter = adapterTimes
+            spinnerTime2.adapter = adapterTimes
+        }
+
+//        val adapterCampos = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaCampos)
+//        adapterCampos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        spinnerCampos.adapter = adapterCampos
+
+        lifecycleScope.launch {
+            campoDAO.listarTodosCampos().collect { campos ->
+                val listaCampos = campos.map { "${it.rua}, ${it.bairro}, ${it.cidade}" }
+                val adapterCampos = ArrayAdapter(this@PartidaAmistosaActivity, android.R.layout.simple_spinner_item, listaCampos)
+                adapterCampos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerCampos.adapter = adapterCampos
+            }
+        }
 
         // Botão para escolher a data
         btnDataSelecionada.setOnClickListener {
@@ -68,7 +105,6 @@ class PartidaAmistosaActivity : AppCompatActivity() {
         btnIniciarPartida.setOnClickListener {
             val time1Selecionado = spinnerTime1.selectedItem.toString()
             val time2Selecionado = spinnerTime2.selectedItem.toString()
-            val campoSelecionado = spinnerCampos.selectedItem.toString()
 
             if (time1Selecionado == time2Selecionado) {
                 Toast.makeText(this, "Escolha times diferentes!", Toast.LENGTH_SHORT).show()
@@ -86,6 +122,7 @@ class PartidaAmistosaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val campoSelecionado = spinnerCampos.selectedItem.toString()
 
             val mensagem = """
                 Partida amistosa iniciada!
@@ -98,7 +135,13 @@ class PartidaAmistosaActivity : AppCompatActivity() {
 
             Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
 
-            val partida = Partida(time1Selecionado, time2Selecionado, campoSelecionado, dataSelecionada!!, horaSelecionada!!)
+            val partida = Partida(
+                time1Selecionado,
+                time2Selecionado,
+                campoSelecionado,
+                dataSelecionada!!,
+                horaSelecionada!!
+            )
             DadosPartida.listaPartidas.add(partida)
 
             Toast.makeText(this, "Partida agendada com sucesso!", Toast.LENGTH_LONG).show()

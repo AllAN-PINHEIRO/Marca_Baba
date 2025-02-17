@@ -1,6 +1,4 @@
-package com.example.marca_baba;
-
-import java.util.Base64;
+package com.example.marca_baba.model;
 
 public class Campo {
     private String Rua;

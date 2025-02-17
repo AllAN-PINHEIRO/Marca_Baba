@@ -1,9 +1,11 @@
-package com.example.marca_baba
+package com.example.marca_baba.controller
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.marca_baba.model.Jogador
+import com.example.marca_baba.R
 
 class CadastrarJogador : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

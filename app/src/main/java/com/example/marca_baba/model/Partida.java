@@ -1,4 +1,4 @@
-package com.example.marca_baba;
+package com.example.marca_baba.model;
 
 public class Partida {
     private String time1;
