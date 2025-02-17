@@ -3,11 +3,11 @@ package com.example.marca_baba.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Time {
+public class TimeModel {
     private String nomeTime;
     private List<Jogador> jogadores;
 
-    public Time(String nomeTime, List<Jogador> jogadores) {
+    public TimeModel(String nomeTime, List<Jogador> jogadores) {
         this.nomeTime = nomeTime;
         this.jogadores = jogadores != null ? jogadores : new ArrayList<>();
     }

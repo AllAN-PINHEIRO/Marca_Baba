@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class CampeonatoTime(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    val campeonatoId: Int, //FK
-    val idTime: Int //FK
+    val id: Long = 0,
+    val campeonatoId: Long, //FK
+    val idTime: Long //FK
 )

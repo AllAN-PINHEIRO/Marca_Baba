@@ -5,11 +5,11 @@ import java.util.List;
 public class Campeonato {
 
     private String nome;
-    private List<Time> times;
+    private List<TimeModel> timeModels;
 
-    public Campeonato(String nome, List<Time> times) {
+    public Campeonato(String nome, List<TimeModel> timeModels) {
         this.nome = nome;
-        this.times = times;
+        this.timeModels = timeModels;
     }
 
     public String getNome() {
@@ -20,11 +20,11 @@ public class Campeonato {
         this.nome = nome;
     }
 
-    public List<Time> getTimes() {
-        return times;
+    public List<TimeModel> getTimes() {
+        return timeModels;
     }
 
-    public void setTimes(List<Time> times) {
-        this.times = times;
+    public void setTimes(List<TimeModel> timeModels) {
+        this.timeModels = timeModels;
     }
 }

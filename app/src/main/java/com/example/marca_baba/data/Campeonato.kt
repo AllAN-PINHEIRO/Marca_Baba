@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class Campeonato(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val id: Long = 0,
     val nome: String
 )

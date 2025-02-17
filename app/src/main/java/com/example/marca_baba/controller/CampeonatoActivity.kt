@@ -3,10 +3,16 @@ package com.example.marca_baba.controller
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.marca_baba.model.Campeonato
-import com.example.marca_baba.data.DadosPartida
+import androidx.lifecycle.lifecycleScope
 import com.example.marca_baba.R
-import com.example.marca_baba.model.Time
+import com.example.marca_baba.dao.CampeonatoDAO
+import com.example.marca_baba.dao.CampeonatoTimeDAO
+import com.example.marca_baba.dao.TimeDAO
+import com.example.marca_baba.data.AppDatabase
+import com.example.marca_baba.data.Campeonato
+import com.example.marca_baba.data.CampeonatoTime
+import com.example.marca_baba.data.Time
+import kotlinx.coroutines.launch
 
 class CampeonatoActivity : AppCompatActivity() {
 
@@ -16,10 +22,14 @@ class CampeonatoActivity : AppCompatActivity() {
     private lateinit var salvarCampeonatoButton: Button
     private lateinit var timesListView: ListView
 
-    private val timesCadastrados = ArrayList(DadosPartida.listaTimes)
-    private val campeonatosSalvos = mutableListOf<Campeonato>()
+    private val timesCadastrados = ArrayList<Time>()
     private val timesDoCampeonato = mutableListOf<Time>()
     private lateinit var timesAdapter: ArrayAdapter<String>
+
+    private lateinit var timeDAO: TimeDAO
+    private lateinit var campeonatoDAO: CampeonatoDAO
+    private lateinit var campeonatoTimeDAO: CampeonatoTimeDAO
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +41,24 @@ class CampeonatoActivity : AppCompatActivity() {
         salvarCampeonatoButton = findViewById(R.id.salvarCampeonatoButton)
         timesListView = findViewById(R.id.timesListView)
 
-        val timesNomes = timesCadastrados.map { it.nomeTime }
+        // Inicializa o banco de dados e os DAOs
+        db = AppDatabase.getDatabase(this)
+        timeDAO = db.timeDAO()
+        campeonatoDAO = db.campeonatoDAO()
+        campeonatoTimeDAO = db.campeonatoTimeDAO()
 
-        // Configurando o Spinner
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timesNomes)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        timesSpinner.adapter = spinnerAdapter
+        // Configura o Spinner com os times do banco de dados
+        lifecycleScope.launch {
+            val times = timeDAO.listarTodosTimes()
+            timesCadastrados.addAll(times)
 
-        // Configurando o ListView
+            val timesNomes = timesCadastrados.map { it.nomeTime }
+            val spinnerAdapter = ArrayAdapter(this@CampeonatoActivity, android.R.layout.simple_spinner_item, timesNomes)
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            timesSpinner.adapter = spinnerAdapter
+        }
+
+        // Configura o ListView
         timesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, timesDoCampeonato.map { it.nomeTime })
         timesListView.adapter = timesAdapter
 
@@ -53,6 +73,8 @@ class CampeonatoActivity : AppCompatActivity() {
         if (time != null && timesDoCampeonato.size < 8 && !timesDoCampeonato.contains(time)) {
             timesDoCampeonato.add(time)
             atualizarLista()
+        } else if (timesDoCampeonato.size >= 8) {
+            Toast.makeText(this, "Máximo de 8 times atingido!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -66,35 +88,36 @@ class CampeonatoActivity : AppCompatActivity() {
         }
 
         // Verifica se há pelo menos 2 times no campeonato
-        if (nomeCampeonato.isNotEmpty() && timesDoCampeonato.size >= 2) {
-            val campeonato = Campeonato(
-                nomeCampeonato,
-                ArrayList(timesDoCampeonato)
-            )
-            campeonatosSalvos.add(campeonato)
-            campeonatoNomeEditText.setText("")
-            timesDoCampeonato.clear()
-            atualizarLista()
-        }
-
-        // Verifica se já existe um campeonato com o mesmo nome
-        if (DadosPartida.listaCampeonatos.any { it.nome == nomeCampeonato }) {
-            Toast.makeText(this, "Já existe um campeonato com esse nome!", Toast.LENGTH_SHORT).show()
+        if (timesDoCampeonato.size < 2) {
+            Toast.makeText(this, "Adicione pelo menos 2 times ao campeonato!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Salva o campeonato
-        val campeonato = Campeonato(
-            nomeCampeonato,
-            ArrayList(timesDoCampeonato)
-        )
-        DadosPartida.listaCampeonatos.add(campeonato)
+        // Salva o campeonato no banco de dados
+        lifecycleScope.launch {
+            try {
+                val campeonato = Campeonato(nome = nomeCampeonato)
+                val campeonatoId = campeonatoDAO.inserirCampeonato(campeonato) // Retorna o ID do campeonato (Long)
 
-        // Limpa os campos após salvar
-        campeonatoNomeEditText.text.clear()
-        timesDoCampeonato.clear()
-        atualizarLista()
-        Toast.makeText(this, "Campeonato salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                // Associa os times ao campeonato
+                timesDoCampeonato.forEach { time ->
+                    val campeonatoTime = CampeonatoTime(
+                        campeonatoId = campeonatoId, // Já é Long
+                        idTime = time.id // Já é Long
+                    )
+                    campeonatoTimeDAO.inserirCampeonatoTime(campeonatoTime) // Insere o relacionamento
+                }
+
+                Toast.makeText(this@CampeonatoActivity, "Campeonato salvo com sucesso!", Toast.LENGTH_SHORT).show()
+
+                // Limpa os campos após salvar
+                campeonatoNomeEditText.text.clear()
+                timesDoCampeonato.clear()
+                atualizarLista()
+            } catch (e: Exception) {
+                Toast.makeText(this@CampeonatoActivity, "Erro ao salvar o campeonato: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun atualizarLista() {

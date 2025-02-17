@@ -2,6 +2,7 @@ package com.example.marca_baba.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.marca_baba.data.Campeonato
@@ -11,8 +12,8 @@ import com.example.marca_baba.data.CampeonatoComTimes
 interface CampeonatoDAO {
 
     // Inserir um novo campeonato
-    @Insert
-    suspend fun inserirCampeonato(campeonato: Campeonato)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun inserirCampeonato(campeonato: Campeonato) : Long
 
     // Listar todos os campeonatos
     @Query("SELECT * FROM campeonato")
