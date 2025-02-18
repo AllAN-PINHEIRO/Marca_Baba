@@ -3,6 +3,7 @@ package com.example.marca_baba.controller
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,7 @@ import com.example.marca_baba.data.Campo
 import com.example.marca_baba.data.Partida
 import com.example.marca_baba.view.TimeViewModel
 import com.example.marca_baba.view.TimeViewModelFactory
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -103,10 +105,14 @@ class PartidaAmistosaActivity : AppCompatActivity() {
 
         // Botão para iniciar a partida
         btnIniciarPartida.setOnClickListener {
+            Log.d("PartidaAmistosaActivity", "Iniciando partida...")
             val time1Selecionado = spinnerTime1.selectedItem.toString()
             val time2Selecionado = spinnerTime2.selectedItem.toString()
+            Log.d("PartidaAmistosa", "Time 1 selecionado: $time1Selecionado")
+            Log.d("PartidaAmistosa", "Time 2 selecionado: $time2Selecionado")
 
             if (time1Selecionado == time2Selecionado) {
+                Log.e("PartidaAmistosa", "Times selecionados são iguais")
                 runOnUiThread {
                     Toast.makeText(this@PartidaAmistosaActivity, "Escolha times diferentes!", Toast.LENGTH_SHORT).show()
                 }
@@ -114,11 +120,15 @@ class PartidaAmistosaActivity : AppCompatActivity() {
             }
 
             if (dataSelecionada == null || horaSelecionada == null) {
+                Log.e("PartidaAmistosa", "Data ou hora não selecionada")
                 runOnUiThread {
                     Toast.makeText(this@PartidaAmistosaActivity, "Escolha data e hora da partida!", Toast.LENGTH_SHORT).show()
                 }
                 return@setOnClickListener
             }
+
+            Log.d("PartidaAmistosa", "Data selecionada: $dataSelecionada")
+            Log.d("PartidaAmistosa", "Hora selecionada: $horaSelecionada")
 
             lifecycleScope.launch {
                 // Verifica se há pelo menos dois times cadastrados
@@ -135,15 +145,28 @@ class PartidaAmistosaActivity : AppCompatActivity() {
                 val time2 = timesCadastrados.find { it.nomeTime == time2Selecionado }
 
                 if (time1 == null || time2 == null) {
+                    Log.e("PartidaAmistosa", "Erro ao obter os times do banco de dados")
                     runOnUiThread {
                         Toast.makeText(this@PartidaAmistosaActivity, "Erro ao buscar times selecionados!", Toast.LENGTH_SHORT).show()
                     }
                     return@launch
                 }
 
+                Log.d("PartidaAmistosa", "Time 1: $time1")
+                Log.d("PartidaAmistosa", "Time 2: $time2")
+
+                // Verificando se os times são válidos
+                if (time1.id == time2.id) {
+                    Log.e("PartidaAmistosa", "Erro: Os times selecionados são o mesmo")
+                    runOnUiThread {
+                        Toast.makeText(this@PartidaAmistosaActivity, "Não pode jogar contra o mesmo time!", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+
                 // Coleta os campos do Flow
                 val campos = mutableListOf<Campo>()
-                campoDAO.listarTodosCampos().collect { listaCampos ->
+                campoDAO.listarTodosCampos().first() { listaCampos ->
                     campos.addAll(listaCampos)
                 }
 
@@ -168,11 +191,25 @@ class PartidaAmistosaActivity : AppCompatActivity() {
                     hora = horaSelecionada!!
                 )
 
-                partidaDAO.inserirPartida(partida)
+                Log.d("PartidaAmistosa", "Dados da partida: $partida")
 
-                runOnUiThread {
-                    Toast.makeText(this@PartidaAmistosaActivity, "Partida agendada com sucesso!", Toast.LENGTH_LONG).show()
+                // Tentando salvar os dados da partida
+                try {
+                    partidaDAO.inserirPartida(partida)
+                    runOnUiThread {
+                        Toast.makeText(this@PartidaAmistosaActivity, "Partida agendada com sucesso!", Toast.LENGTH_LONG).show()
+                    }
+                    // Log de sucesso
+                    println("Partida salva com sucesso: $partida")
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(this@PartidaAmistosaActivity, "Erro ao salvar partida: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                    // Log de erro
+                    println("Erro ao salvar partida: ${e.message}")
                 }
+
+                println("Time 1 ID: ${time1.id}, Time 2 ID: ${time2.id}, Campo ID: ${campo.id}")
             }
         }
     }

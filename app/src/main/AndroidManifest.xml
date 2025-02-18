@@ -30,7 +30,7 @@
         <activity android:name=".controller.CadastrarCampo" />
         <activity android:name=".controller.PartidaAmistosaActivity" />
         <activity android:name=".controller.CampeonatoActivity" />
-        <activity android:name=".DadosPartidaActivity"/>
+        <activity android:name=".controller.EventosActivity" />
 
 
     </application>

@@ -2,6 +2,7 @@ package com.example.marca_baba.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.marca_baba.data.Partida
 
@@ -9,7 +10,7 @@ import com.example.marca_baba.data.Partida
 interface PartidaDAO {
 
     // Inserir uma partida
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserirPartida(partida: Partida)
 
     // Listar todas as partidas

@@ -21,7 +21,7 @@ import com.example.marca_baba.dao.TimeDAO
         Campo::class,
         Partida::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 
